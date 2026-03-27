@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>🌸 SereneMind - Your Beautiful Mental Wellness Companion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #fff5f8 0%, #ffe8f0 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #ffe4ed; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, #ffb7c5 0%, #ff9eb0 100%); border-radius: 10px; }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 5px 30px rgba(255, 150, 180, 0.1);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 183, 197, 0.3);
+        }
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.6rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Playfair Display', serif;
+        }
+        .logo-icon { font-size: 2rem; animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        .logo-text { background: linear-gradient(135deg, #ff9eb0 0%, #ffb7c5 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .nav-links { display: flex; list-style: none; gap: 1rem; }
+        .nav-links a {
+            text-decoration: none;
+            color: #aa8c9e;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+        .nav-links a:hover, .nav-links a.active { background: linear-gradient(135deg, #ffb7c5 0%, #ff9eb0 100%); color: white; transform: translateY(-2px); }
+        .mobile-menu { display: none; font-size: 1.5rem; cursor: pointer; color: #ff9eb0; }
+
+        .page-container { max-width: 1400px; margin: 80px auto 0; padding: 2rem; min-height: calc(100vh - 160px); }
+        .page { display: none; animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .page.active { display: block; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin: 3rem 0 1rem;
+            font-family: 'Playfair Display', serif;
+            background: linear-gradient(135deg, #ff9eb0 0%, #ffb7c5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .beauty-card {
+            background: white;
+            border-radius: 35px;
+            padding: 2rem;
+            box-shadow: 0 15px 35px rgba(255, 150, 180, 0.1);
+            border: 1px solid rgba(255, 183, 197, 0.3);
+            transition: all 0.3s;
+        }
+        .beauty-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(255, 150, 180, 0.2); }
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin: 2rem 0; }
+        .feature-card {
+            background: white;
+            border-radius: 30px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.4s;
+            cursor: pointer;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            border: 1px solid rgba(255,183,197,0.3);
+        }
+        .feature-card:hover { transform: translateY(-10px); border-color: #ffb7c5; }
+        .feature-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin: 2rem 0; }
+        .product-card {
+            background: white;
+            border-radius: 30px;
+            overflow: hidden;
+            transition: all 0.4s;
+            border: 1px solid rgba(255,183,197,0.3);
+        }
+        .product-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(255,150,180,0.2); }
+        .product-image { height: 200px; background: linear-gradient(135deg, #fff5f8 0%, #ffe8f0 100%); display: flex; align-items: center; justify-content: center; font-size: 5rem; }
+        .product-info { padding: 1.5rem; }
+        .product-price { font-size: 1.5rem; color: #ff9eb0; font-weight: bold; margin: 0.5rem 0; }
+
+        .mood-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; margin: 2rem 0; }
+        .mood-btn {
+            text-align: center;
+            padding: 1rem;
+            background: linear-gradient(135deg, #fff5f8 0%, #ffe8f0 100%);
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 2rem;
+        }
+        .mood-btn:hover { transform: scale(1.05); box-shadow: 0 10px 25px rgba(255,107,107,0.2); }
+
+        .doctor-card {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 25px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        .doctor-card:hover { transform: translateX(8px); }
+        .doctor-card.selected { border-color: #ff9eb0; background: #fff5f8; }
+        .doctor-avatar { width: 80px; height: 80px; background: linear-gradient(135deg, #ffb7c5 0%, #ff9eb0 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: white; }
+
+        .chat-messages { height: 400px; overflow-y: auto; background: #fff5f8; border-radius: 30px; padding: 1rem; }
+        .message { margin-bottom: 1rem; display: flex; }
+        .message.user { justify-content: flex-end; }
+        .message-content { max-width: 70%; padding: 12px 18px; border-radius: 20px; }
+        .message.user .message-content { background: linear-gradient(135deg, #ffb7c5 0%, #ff9eb0 100%); color: white; }
+        .message.bot .message-content { background: white; border: 1px solid #ffe4ed; color: #aa8c9e; }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ffb7c5 0%, #ff9eb0 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255,158,176,0.4); }
+        .export-pdf-btn {
+            background: linear-gradient(135deg, #ffb7c5 0%, #ff9eb0 100%);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input, select, textarea {
+            font-family: 'Quicksand', sans-serif;
+            padding: 12px;
+            border: 2px solid #ffe4ed;
+            border-radius: 25px;
+            outline: none;
+            transition: all 0.3s;
+        }
+        input:focus, select:focus, textarea:focus { border-color: #ffb7c5; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 40px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: modalSlideIn 0.3s ease;
+        }
+        @keyframes modalSlideIn { from { opacity: 0; transform: translateY(-50px); } to { opacity: 1; transform: translateY(0); } }
+        .payment-option { padding: 1rem; margin: 0.5rem 0; border: 2px solid #ffe4ed; border-radius: 20px; cursor: pointer; }
+        .payment-option.selected { border-color: #ff9eb0; background: #fff5f8; }
+
+        .pdf-content { display: none; }
+        .pdf-journal {
+            background: linear-gradient(135deg, #fff9fb 0%, #fff0f5 100%);
+            padding: 40px;
+            font-family: 'Quicksand', sans-serif;
+            position: relative;
+        }
+        .pdf-journal::before { content: "🌸"; position: absolute; top: 20px; left: 20px; font-size: 60px; opacity: 0.1; }
+        .pdf-journal::after { content: "💕"; position: absolute; bottom: 20px; right: 20px; font-size: 60px; opacity: 0.1; }
+        .pdf-header { text-align: center; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 2px dashed #ffb7c5; }
+        .pdf-header h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: #ff8aa8; }
+        .pdf-section { background: white; border-radius: 25px; padding: 25px; margin-bottom: 25px; border-left: 5px solid #ffb7c5; }
+        .pdf-section h3 { color: #ff8aa8; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .mood-entry-pdf, .chat-entry-pdf, .goal-pdf { padding: 12px; border-bottom: 1px solid #ffe4ed; margin-bottom: 8px; }
+
+        footer { background: linear-gradient(135deg, #f5e6ec 0%, #ffebf0 100%); text-align: center; padding: 3rem; margin-top: 4rem; color: #aa8c9e; }
+        @media (max-width: 768px) {
+            .nav-links { display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; flex-direction: column; padding: 1rem; text-align: center; }
+            .nav-links.active { display: flex; }
+            .mobile-menu { display: block; }
+            .mood-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo" onclick="showPage('home')"><span class="logo-icon">🌸</span><span class="logo-text">SereneMind</span></div>
+            <ul class="nav-links" id="navLinks">
+                <li><a onclick="showPage('home')"><i class="fas fa-home"></i> Home</a></li>
+                <li><a onclick="showPage('dashboard')"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                <li><a onclick="showPage('chatbot')"><i class="fas fa-robot"></i> SereneAI</a></li>
+                <li><a onclick="showPage('mood')"><i class="fas fa-smile"></i> Mood Journal</a></li>
+                <li><a onclick="showPage('products')"><i class="fas fa-store"></i> Wellness Shop</a></li>
+                <li><a onclick="showPage('appointments')"><i class="fas fa-calendar-check"></i> Consult</a></li>
+                <li><a onclick="showPage('profile')"><i class="fas fa-user"></i> Profile</a></li>
+            </ul>
+            <div class="mobile-menu" onclick="toggleMenu()">☰</div>
+        </div>
+    </nav>
+
+    <div class="page-container">
+        <!-- HOME PAGE -->
+        <div id="home" class="page active">
+            <div style="text-align: center; padding: 3rem; background: linear-gradient(135deg, #fff5f8 0%, #ffe8f0 100%); border-radius: 50px; margin: 1rem 0;">
+                <h2 style="font-family: 'Playfair Display', serif; font-size: 2.5rem; color: #ff8aa8;">🌸 Your Beautiful Journey Awaits 🌸</h2>
+                <p style="font-size: 1.1rem; color: #aa8c9e; margin: 1rem 0;">Every step you take is a precious part of your story</p>
+                <button class="export-pdf-btn" onclick="exportBeautifulPDF()"><i class="fas fa-download"></i> Download Your Beautiful Journal 📔</button>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-card" onclick="showPage('chatbot')"><div class="feature-icon">🤗</div><h3>SereneAI Companion</h3><p>24/7 compassionate listening and support</p></div>
+                <div class="feature-card" onclick="showPage('mood')"><div class="feature-icon">📖</div><h3>Mood Journal</h3><p>Track emotions with beautiful insights</p></div>
+                <div class="feature-card" onclick="showPage('products')"><div class="feature-icon">🛍️</div><h3>Wellness Boutique</h3><p>Curated self-care products</p></div>
+                <div class="feature-card" onclick="showPage('appointments')"><div class="feature-icon">💝</div><h3>Heartfelt Consultations</h3><p>Connect with caring professionals</p></div>
+            </div>
+            <div class="feature-grid">
+                <div class="beauty-card" style="text-align:center;"><div style="font-size:3rem;">🌅</div><h3>Morning Rituals</h3><p>Start your day with mindfulness</p></div>
+                <div class="beauty-card" style="text-align:center;"><div style="font-size:3rem;">📝</div><h3>Gratitude Practice</h3><p>Find joy in small moments</p></div>
+                <div class="beauty-card" style="text-align:center;"><div style="font-size:3rem;">🧘</div><h3>Mindful Moments</h3><p>Breathe, relax, reset</p></div>
+            </div>
+            <div class="beauty-card" style="text-align:center; background: linear-gradient(135deg, #ffb7c5 0%, #ff9eb0 100%); color: white;">
+                <h2 style="color: white;">💖 Daily Self-Care Reminder</h2>
+                <p style="font-size: 1.2rem; margin-top: 1rem;">"You are worthy of love, care, and happiness. Take a deep breath—you're doing amazing."</p>
+                <button class="btn-primary" style="background: white; color: #ff9eb0; margin-top: 1.5rem;" onclick="showPage('mood')">Check In With Yourself →</button>
+            </div>
+        </div>
+
+        <!-- DASHBOARD -->
+        <div id="dashboard" class="page">
+            <h1 class="section-title">📊 Your Wellness Dashboard</h1>
+            <div class="feature-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                <div class="beauty-card" style="text-align:center;"><div class="stat-number" id="dashChatCount" style="font-size:3rem; font-weight:bold; color:#ff9eb0;">0</div><p>Heartfelt Chats</p></div>
+                <div class="beauty-card" style="text-align:center;"><div class="stat-number" id="dashMoodCount" style="font-size:3rem; font-weight:bold; color:#ff9eb0;">0</div><p>Moods Journaled</p></div>
+                <div class="beauty-card" style="text-align:center;"><div class="stat-number" id="dashApptCount" style="font-size:3rem; font-weight:bold; color:#ff9eb0;">0</div><p>Care Sessions</p></div>
+            </div>
+            <div class="beauty-card"><h3>🌸 Today's Gentle Reminder</h3><p id="dailyInsight">You are enough, just as you are. Take a moment to breathe. 💕</p></div>
+        </div>
+
+        <!-- CHATBOT -->
+        <div id="chatbot" class="page">
+            <div class="beauty-card"><h2>🤗 SereneAI - Your Gentle Companion</h2><p>I'm here to listen, always.</p></div>
+            <div class="chat-messages" id="chatMessages"><div class="message bot"><div class="message-content">Hello beautiful soul! How are you feeling today? I'm here to hold space for you. 💕</div></div></div>
+            <div style="display: flex; gap: 1rem; margin-top: 1rem;"><input type="text" id="chatInput" placeholder="Share what's on your heart..." style="flex:1;"><button onclick="sendMessage()" class="btn-primary">Send</button><button onclick="clearChat()" style="background:#ffb7c5; border:none; border-radius:50px; padding:0 20px;">Clear</button></div>
+        </div>
+
+        <!-- MOOD TRACKER -->
+        <div id="mood" class="page">
+            <h1 class="section-title">🌊 Gentle Mood Journal</h1>
+            <p style="text-align:center;">How does your heart feel today?</p>
+            <div class="mood-grid" id="moodGrid">
+                <button class="mood-btn" data-mood="😊" data-value="10">😊<br>Radiant</button>
+                <button class="mood-btn" data-mood="😌" data-value="8">😌<br>Peaceful</button>
+                <button class="mood-btn" data-mood="😐" data-value="5">😐<br>Calm</button>
+                <button class="mood-btn" data-mood="😔" data-value="3">😔<br>Tender</button>
+                <button class="mood-btn" data-mood="😢" data-value="2">😢<br>Heavy</button>
+                <button class="mood-btn" data-mood="😰" data-value="2">😰<br>Anxious</button>
+            </div>
+            <div id="moodFeedback" style="background:#ffe9e6; padding:1rem; border-radius:20px; display:none; margin:1rem 0;"></div>
+            <div class="feature-grid" style="grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));">
+                <div class="beauty-card" style="text-align:center;"><h3 id="avgMood">0</h3><p>Avg Mood</p></div>
+                <div class="beauty-card" style="text-align:center;"><h3 id="bestMood">-</h3><p>Best Mood</p></div>
+                <div class="beauty-card" style="text-align:center;"><h3 id="moodStreak">0</h3><p>Streak</p></div>
+                <div class="beauty-card" style="text-align:center;"><h3 id="totalMoods">0</h3><p>Entries</p></div>
+            </div>
+            <div class="beauty-card"><h3>📅 Recent Gentle Reflections</h3><div id="moodHistoryList"></div></div>
+        </div>
+
+        <!-- PRODUCTS -->
+        <div id="products" class="page">
+            <h1 class="section-title">🛍️ Serene Wellness Boutique</h1>
+            <p style="text-align:center;">Beautiful self-care treasures for your journey</p>
+            <div class="product-grid" id="productsGrid"></div>
+            <div class="beauty-card"><h3>🛒 Your Self-Care Cart</h3><div id="cartItems"></div><div class="cart-total" style="font-size:1.5rem; font-weight:bold; text-align:right; margin-top:1rem;">Total: $<span id="cartTotal">0</span></div><button class="btn-primary" onclick="openCheckout()">Checkout with Love 💕</button></div>
+        </div>
+
+        <!-- APPOINTMENTS -->
+        <div id="appointments" class="page">
+            <h1 class="section-title">👩‍⚕️ Heartfelt Consultations</h1>
+            <p style="text-align:center;">Connect with caring professionals</p>
+            <div id="doctorList"></div>
+            <div class="beauty-card"><h3>📅 Book a Gentle Session</h3>
+                <form id="appointmentForm"><input type="text" id="aptName" placeholder="Your Name" style="width:100%; margin-bottom:1rem;"><input type="email" id="aptEmail" placeholder="Email" style="width:100%; margin-bottom:1rem;"><input type="tel" id="aptPhone" placeholder="Phone" style="width:100%; margin-bottom:1rem;"><input type="date" id="aptDate" style="width:100%; margin-bottom:1rem;"><select id="aptTime" style="width:100%; margin-bottom:1rem;"><option>10:00 AM</option><option>11:00 AM</option><option>2:00 PM</option><option>3:00 PM</option><option>4:00 PM</option></select><textarea id="aptReason" rows="3" placeholder="What would you like to talk about?" style="width:100%; margin-bottom:1rem;"></textarea><button type="submit" class="btn-primary">Book with Love 💕</button></form>
+            </div>
+            <div class="beauty-card"><h3>📅 Your Sacred Sessions</h3><div id="appointmentsList"></div></div>
+        </div>
+
+        <!-- PROFILE -->
+        <div id="profile" class="page">
+            <h1 class="section-title">👤 Your Sacred Space</h1>
+            <div class="beauty-card"><form id="profileForm"><input type="text" id="profileName" placeholder="Your Name" style="width:100%; margin-bottom:1rem;"><input type="email" id="profileEmail" placeholder="Email" style="width:100%; margin-bottom:1rem;"><button type="submit" class="btn-primary">Save Your Essence</button></form></div>
+            <div class="beauty-card"><h3>🎯 Gentle Intentions</h3><div style="display:flex; gap:1rem;"><input type="text" id="newGoal" placeholder="Add a gentle intention..." style="flex:1;"><button onclick="addGoal()" class="btn-primary">Plant Intention</button></div><div id="goalsList"></div></div>
+            <div class="beauty-card"><h3>📝 Heartfelt Reflections</h3><textarea id="newNote" rows="3" placeholder="Write from your heart..." style="width:100%; margin-bottom:1rem;"></textarea><button onclick="addNote()" class="btn-primary">Save Reflection</button><div id="notesList"></div></div>
+            <div class="beauty-card"><button onclick="exportBeautifulPDF()" class="btn-primary" style="background:#28a745; margin-right:1rem;">📥 Export Your Journey</button><button onclick="clearAllData()" style="background:#ffb7c5; border:none; padding:12px 30px; border-radius:50px;">🌿 Reset & Begin Anew</button></div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content">
+            <h2 style="color:#ff8aa8;">💕 Complete Your Order</h2>
+            <input type="text" id="fullName" placeholder="Full Name" style="width:100%; margin:10px 0;"><input type="email" id="emailAddress" placeholder="Email" style="width:100%; margin:10px 0;"><input type="tel" id="phoneNumber" placeholder="Phone" style="width:100%; margin:10px 0;"><input type="text" id="addressLine" placeholder="Street Address" style="width:100%; margin:10px 0;"><input type="text" id="city" placeholder="City" style="width:100%; margin:10px 0;"><input type="text" id="zipCode" placeholder="Zip Code" style="width:100%; margin:10px 0;">
+            <h3>💳 Payment Method</h3>
+            <div class="payment-option" onclick="selectPayment('online')" id="paymentOnline"><i class="fas fa-credit-card"></i> Online Payment (Card/UPI)</div>
+            <div class="payment-option" onclick="selectPayment('offline')" id="paymentOffline"><i class="fas fa-money-bill-wave"></i> Cash on Delivery</div>
+            <div style="margin-top:1rem;"><strong>Total: $<span id="modalTotal">0</span></strong></div>
+            <button class="btn-primary" onclick="processOrder()" style="width:100%; margin-top:1rem;">Place Order with Love 💕</button>
+            <button onclick="closeCheckout()" style="width:100%; margin-top:0.5rem; background:#eee; border:none; padding:12px; border-radius:25px;">Cancel</button>
+        </div>
+    </div>
+
+    <!-- PDF Template -->
+    <div id="pdfTemplate" class="pdf-content">
+        <div class="pdf-journal" id="pdfJournalContent">
+            <div class="pdf-header"><h1>🌸 My SereneMind Journey 🌸</h1><div class="pdf-date">Created with love on <span id="pdfDate"></span></div><div>✨ A beautiful record of my mental wellness journey ✨</div></div>
+            <div id="pdfMoodSection" class="pdf-section"></div>
+            <div id="pdfChatSection" class="pdf-section"></div>
+            <div id="pdfGoalsSection" class="pdf-section"></div>
+            <div id="pdfNotesSection" class="pdf-section"></div>
+            <div id="pdfAppointmentsSection" class="pdf-section"></div>
+            <div class="footer-note" style="text-align:center; margin-top:40px; padding-top:20px; border-top:2px dashed #ffb7c5;"><p>🌸 Every feeling is valid, every step is progress 🌸</p><p>💕 You are doing amazing, beautiful soul! 💕</p></div>
+        </div>
+    </div>
+
+    <footer>
+        <p>🌸 SereneMind - Your Gentle Companion on the Path to Inner Peace 🌸</p>
+        <p>📞 24/7 Heartfelt Support: 988 | 💌 hello@serenemind.com</p>
+        <p>✨ You are loved, you are worthy, you are enough ✨</p>
+    </footer>
+
+    <script>
+        // Data Storage
+        let moodHistory = [], appointments = [], goals = [], notes = [], cart = [], chatHistory = [];
+        let userName = "Guest", userEmail = "", selectedPayment = "", selectedDoctor = null;
+
+        const productList = [
+            { id: 1, name: "Mindfulness Journal", price: 24.99, desc: "Daily prompts for gentle reflection", icon: "📔" },
+            { id: 2, name: "Calm Essential Oil Set", price: 39.99, desc: "Lavender, chamomile, bergamot", icon: "🌿" },
+            { id: 3, name: "Stress Relief Tea", price: 19.99, desc: "Organic calming herbal blend", icon: "🍵" },
+            { id: 4, name: "Meditation Cushion", price: 49.99, desc: "Ergonomic support for peace", icon: "🧘" },
+            { id: 5, name: "Gratitude Cards", price: 14.99, desc: "52 daily gratitude prompts", icon: "💝" },
+            { id: 6, name: "Wellness Planner", price: 29.99, desc: "Track your beautiful journey", icon: "📅" }
+        ];
+
+        const doctors = [
+            { name: "Dr. Revanth Kumar", specialty: "Senior Psychiatrist", exp: "15+ years", rating: 4.9, reviews: 128, icon: "👨‍⚕️" },
+            { name: "Dr. Sai Lakshmi", specialty: "Clinical Psychologist", exp: "12+ years", rating: 4.8, reviews: 95, icon: "👩‍⚕️" },
+            { name: "Dr. Meera Nair", specialty: "Mental Health Counselor", exp: "8+ years", rating: 4.9, reviews: 112, icon: "👩‍⚕️" }
+        ];
+
+        function loadData() {
+            moodHistory = JSON.parse(localStorage.getItem('serene_moods') || '[]');
+            appointments = JSON.parse(localStorage.getItem('serene_appointments') || '[]');
+            goals = JSON.parse(localStorage.getItem('serene_goals') || '[]');
+            notes = JSON.parse(localStorage.getItem('serene_notes') || '[]');
+            cart = JSON.parse(localStorage.getItem('serene_cart') || '[]');
+            chatHistory = JSON.parse(localStorage.getItem('serene_chat') || '[]');
+            userName = localStorage.getItem('serene_name') || 'Guest';
+            userEmail = localStorage.getItem('serene_email') || '';
+        }
+        function saveData() {
+            localStorage.setItem('serene_moods', JSON.stringify(moodHistory));
+            localStorage.setItem('serene_appointments', JSON.stringify(appointments));
+            localStorage.setItem('serene_goals', JSON.stringify(goals));
+            localStorage.setItem('serene_notes', JSON.stringify(notes));
+            localStorage.setItem('serene_cart', JSON.stringify(cart));
+            localStorage.setItem('serene_chat', JSON.stringify(chatHistory));
+            localStorage.setItem('serene_name', userName);
+            localStorage.setItem('serene_email', userEmail);
+        }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            if (pageId === 'dashboard') updateDashboard();
+            if (pageId === 'mood') updateMoodDisplay();
+            if (pageId === 'products') { renderProducts(); renderCart(); }
+            if (pageId === 'appointments') { renderDoctors(); updateAppointmentsDisplay(); }
+            if (pageId === 'profile') updateProfileDisplay();
+            if (window.innerWidth <= 768) document.getElementById('navLinks').classList.remove('active');
+        }
+        function toggleMenu() { document.getElementById('navLinks').classList.toggle('active'); }
+
+        // PDF Export
+        function exportBeautifulPDF() {
+            const moodSec = document.getElementById('pdfMoodSection'), chatSec = document.getElementById('pdfChatSection'), goalsSec = document.getElementById('pdfGoalsSection'), notesSec = document.getElementById('pdfNotesSection'), aptSec = document.getElementById('pdfAppointmentsSection');
+            moodSec.innerHTML = '<h3>🌊 My Mood Journey</h3>' + (moodHistory.length === 0 ? '<p>No moods recorded yet.</p>' : moodHistory.slice().reverse().map(m => `<div class="mood-entry-pdf">${m.emoji} Feeling ${getMoodName(m.emoji)} (${m.value}/10) - ${new Date(m.date).toLocaleString()}</div>`).join('') + `<div style="margin-top:15px;">✨ Average Mood: ${Math.round(moodHistory.reduce((s,m)=>s+m.value,0)/moodHistory.length || 0)}/10 ✨</div>`);
+            chatSec.innerHTML = '<h3>💬 Heartfelt Conversations</h3>' + (chatHistory.length === 0 ? '<p>No conversations yet.</p>' : chatHistory.slice().reverse().slice(0,20).map(c => `<div class="chat-entry-pdf"><strong>${c.type === 'user' ? '🌸 Me' : '🤗 SereneAI'}:</strong> ${c.text}</div>`).join(''));
+            goalsSec.innerHTML = '<h3>🎯 Gentle Intentions</h3>' + (goals.length === 0 ? '<p>No goals yet.</p>' : goals.map(g => `<div class="goal-pdf">${g.completed ? '✓' : '○'} ${g.text}</div>`).join(''));
+            notesSec.innerHTML = '<h3>📝 Heartfelt Reflections</h3>' + (notes.length === 0 ? '<p>No reflections yet.</p>' : notes.slice().reverse().map(n => `<div class="goal-pdf">📖 ${n.text}<br><small>${new Date(n.createdAt).toLocaleString()}</small></div>`).join(''));
+            aptSec.innerHTML = '<h3>📅 Self-Care Sessions</h3>' + (appointments.length === 0 ? '<p>No appointments yet.</p>' : appointments.map(a => `<div class="goal-pdf">🌸 ${a.doctor} - ${a.date} at ${a.time}</div>`).join(''));
+            document.getElementById('pdfDate').innerText = new Date().toLocaleString();
+            const element = document.getElementById('pdfJournalContent');
+            html2pdf().set({ margin: [0.5,0.5,0.5,0.5], filename: `SereneMind_Journey_${new Date().toISOString().slice(0,19)}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } }).from(element).save();
+        }
+        function getMoodName(emoji) { const moods = { '😊':'Radiant','😌':'Peaceful','😐':'Calm','😔':'Tender','😢':'Heavy','😰':'Anxious' }; return moods[emoji] || 'Beautiful'; }
+
+        // Mood Functions
+        function logMood(emoji, value) {
+            moodHistory.push({ emoji, value, date: new Date().toISOString() });
+            saveData();
+            updateMoodDisplay();
+            document.getElementById('moodFeedback').innerHTML = `🌸 Mood logged: ${emoji} (${value}/10) - Thank you for honoring your feelings! 💕`;
+            document.getElementById('moodFeedback').style.display = 'block';
+            setTimeout(() => document.getElementById('moodFeedback').style.display = 'none', 3000);
+        }
+        function updateMoodDisplay() {
+            if (moodHistory.length === 0) { document.getElementById('avgMood').innerText = '0'; document.getElementById('bestMood').innerText = '-'; document.getElementById('moodStreak').innerText = '0'; document.getElementById('totalMoods').innerText = '0'; document.getElementById('moodHistoryList').innerHTML = '<p>No moods journaled yet. Begin your gentle practice 🌸</p>'; return; }
+            const avg = Math.round(moodHistory.reduce((s,m)=>s+m.value,0)/moodHistory.length);
+            const best = Math.max(...moodHistory.map(m=>m.value));
+            document.getElementById('avgMood').innerText = avg; document.getElementById('bestMood').innerText = best; document.getElementById('moodStreak').innerText = moodHistory.length; document.getElementById('totalMoods').innerText = moodHistory.length;
+            document.getElementById('moodHistoryList').innerHTML = moodHistory.slice().reverse().slice(0,10).map(m => `<div style="padding:10px; border-bottom:1px solid #ffe4ed;">${m.emoji} (${m.value}/10) - ${new Date(m.date).toLocaleString()}</div>`).join('');
+        }
+
+        // Products
+        function renderProducts() { document.getElementById('productsGrid').innerHTML = productList.map(p => `<div class="product-card"><div class="product-image">${p.icon}</div><div class="product-info"><h3>${p.name}</h3><p>${p.desc}</p><p class="product-price">$${p.price}</p><button class="btn-primary" onclick="addToCart(${p.id})">Add to Cart 💕</button></div></div>`).join(''); }
+        function addToCart(id) { const p = productList.find(p => p.id === id); cart.push(p); saveData(); renderCart(); alert(`${p.name} added to your cart with love 💕`); }
+        function renderCart() { const cartDiv = document.getElementById('cartItems'); if(cart.length===0) cartDiv.innerHTML = '<p>Your cart is empty. Add some self-care treasures 🌸</p>'; else cartDiv.innerHTML = cart.map((item,i) => `<div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #ffe4ed;"><span>${item.icon} ${item.name}</span><span>$${item.price}</span><button onclick="removeFromCart(${i})" style="background:#ffb7c5; border:none; padding:5px 15px; border-radius:20px;">Remove</button></div>`).join(''); document.getElementById('cartTotal').innerText = cart.reduce((s,i)=>s+i.price,0).toFixed(2); }
+        function removeFromCart(i) { cart.splice(i,1); saveData(); renderCart(); }
+        function openCheckout() { if(cart.length===0) alert('Your cart is empty!'); else { document.getElementById('modalTotal').innerText = cart.reduce((s,i)=>s+i.price,0).toFixed(2); document.getElementById('checkoutModal').style.display = 'flex'; } }
+        function closeCheckout() { document.getElementById('checkoutModal').style.display = 'none'; }
+        function selectPayment(type) { selectedPayment = type; document.getElementById('paymentOnline').classList.remove('selected'); document.getElementById('paymentOffline').classList.remove('selected'); document.getElementById(type==='online'?'paymentOnline':'paymentOffline').classList.add('selected'); }
+        function processOrder() { const name=document.getElementById('fullName').value, email=document.getElementById('emailAddress').value, phone=document.getElementById('phoneNumber').value, addr=document.getElementById('addressLine').value, city=document.getElementById('city').value, zip=document.getElementById('zipCode').value; if(!name||!email||!phone||!addr||!city||!zip) { alert('Please fill all address details 💕'); return; } if(!selectedPayment) { alert('Please select a payment method 💕'); return; } alert(`✨ Order Placed with Love! ✨\n\nThank you ${name}!\nTotal: $${cart.reduce((s,i)=>s+i.price,0).toFixed(2)}\nPayment: ${selectedPayment==='online'?'Online Payment':'Cash on Delivery'}\nShipping to: ${addr}, ${city}, ${zip}\n\nYour self-care treasures are on their way! 💕`); cart = []; saveData(); renderCart(); closeCheckout(); }
+
+        // Doctors & Appointments
+        function renderDoctors() { document.getElementById('doctorList').innerHTML = doctors.map(d => `<div class="doctor-card" onclick="selectDoctor('${d.name}')" data-doctor="${d.name}"><div class="doctor-avatar">${d.icon}</div><div><strong>${d.name}</strong><br>${d.specialty} | ${d.exp}<br>⭐ ${d.rating} (${d.reviews} reviews)</div></div>`).join(''); }
+        function selectDoctor(name) { selectedDoctor = name; document.querySelectorAll('.doctor-card').forEach(c => c.classList.remove('selected')); event.currentTarget.classList.add('selected'); }
+        function updateAppointmentsDisplay() { const list = document.getElementById('appointmentsList'); if(appointments.length===0) list.innerHTML='<p>No sessions booked yet. Time to nurture yourself 💕</p>'; else list.innerHTML=appointments.map(a=>`<div style="padding:12px; border-bottom:1px solid #ffe4ed;">🌸 ${a.doctor} - ${a.date} at ${a.time}</div>`).join(''); }
+
+        // Profile Functions
+        function updateProfileDisplay() {
+            document.getElementById('profileName').value = userName === 'Guest' ? '' : userName;
+            document.getElementById('profileEmail').value = userEmail;
+            document.getElementById('goalsList').innerHTML = goals.length===0 ? '<p>No gentle intentions yet. Add your first intention 🌸</p>' : goals.map(g => `<div style="display:flex; gap:10px; padding:12px; background:#fff5f8; margin-bottom:8px; border-radius:20px;"><input type="checkbox" ${g.completed?'checked':''} onchange="toggleGoal(${g.id})"><span style="flex:1; ${g.completed?'text-decoration:line-through;':''}">${escapeHtml(g.text)}</span><button onclick="deleteGoal(${g.id})" style="background:none; border:none; color:#ff9eb0;">🗑️</button></div>`).join('');
+            document.getElementById('notesList').innerHTML = notes.length===0 ? '<p>No reflections yet. Write from your heart 🌸</p>' : notes.slice().reverse().map(n => `<div style="padding:12px; background:#fff5f8; margin-bottom:8px; border-radius:20px;">${escapeHtml(n.text)}<br><small>${new Date(n.createdAt).toLocaleString()}</small></div>`).join('');
+        }
+        function escapeHtml(t){const d=document.createElement('div');d.textContent=t;return d.innerHTML;}
+        function addGoal(){const i=document.getElementById('newGoal'),t=i.value.trim();if(t){goals.push({id:Date.now(),text:t,completed:false,createdAt:new Date().toISOString()});saveData();i.value='';updateProfileDisplay();}}
+        function toggleGoal(id){const g=goals.find(g=>g.id===id);if(g)g.completed=!g.completed;saveData();updateProfileDisplay();}
+        function deleteGoal(id){goals=goals.filter(g=>g.id!==id);saveData();updateProfileDisplay();}
+        function addNote(){const t=document.getElementById('newNote').value.trim();if(t){notes.push({id:Date.now(),text:t,createdAt:new Date().toISOString()});saveData();document.getElementById('newNote').value='';updateProfileDisplay();}}
+        function updateDashboard(){document.getElementById('dashChatCount').innerText=chatHistory.length;document.getElementById('dashMoodCount').innerText=moodHistory.length;document.getElementById('dashApptCount').innerText=appointments.length;const insights=['You are worthy of all the love and care in the world 🌸','Breathe deeply - you are exactly where you need to be 💕','Your feelings are valid, your journey is beautiful 🌈','Take a moment to honor how far you\'ve come ✨'];document.getElementById('dailyInsight').innerHTML=insights[Math.floor(Math.random()*insights.length)];}
+        function clearAllData(){if(confirm('🌿 This will reset your journey. Are you ready for a fresh start?')){localStorage.clear();location.reload();}}
+
+        // Chat Functions
+        function addMessage(type,text){const div=document.getElementById('chatMessages');const msg=document.createElement('div');msg.className=`message ${type}`;msg.innerHTML=`<div class="message-content">${text}</div>`;div.appendChild(msg);div.scrollTop=div.scrollHeight;}
+        function getAIResponse(msg){const l=msg.toLowerCase();if(l.includes('sad')) return "💙 Your feelings are valid. I'm here with you. Would you like to talk about it?";if(l.includes('anxiety')) return "🌿 Let's breathe together. Inhale... exhale... You're safe. 💕";if(l.includes('happy')) return "✨ What beautiful energy! I'm so glad you're feeling joy!";return "🌸 Thank you for sharing your beautiful heart with me. I'm listening with so much love. Tell me more.";}
+        function sendMessage(){const i=document.getElementById('chatInput'),msg=i.value.trim();if(!msg)return;addMessage('user',msg);chatHistory.push({type:'user',text:msg});const res=getAIResponse(msg);setTimeout(()=>{addMessage('bot',res);chatHistory.push({type:'bot',text:res});saveData();},500);i.value='';saveData();}
+        function clearChat(){if(confirm('Clear our conversation?')){chatHistory=[];document.getElementById('chatMessages').innerHTML='<div class="message bot"><div class="message-content">Hello beautiful soul! How are you feeling today? I\'m here to hold space for you. 💕</div></div>';saveData();}}
+
+        // Event Listeners
+        document.querySelectorAll('.mood-btn').forEach(btn=>{btn.addEventListener('click',()=>{logMood(btn.dataset.mood,parseInt(btn.dataset.value));});});
+        document.getElementById('appointmentForm').addEventListener('submit',(e)=>{e.preventDefault();if(!selectedDoctor){alert('Please select a caring professional 💕');return;}const apt={id:Date.now(),doctor:selectedDoctor,name:document.getElementById('aptName').value,email:document.getElementById('aptEmail').value,phone:document.getElementById('aptPhone').value,date:document.getElementById('aptDate').value,time:document.getElementById('aptTime').value,reason:document.getElementById('aptReason').value};if(!apt.name||!apt.email||!apt.phone||!apt.date){alert('Please fill all fields with love 💕');return;}appointments.push(apt);saveData();alert(`✨ Session booked with ${apt.doctor} on ${apt.date}! You've taken a beautiful step for yourself. 💕`);updateAppointmentsDisplay();document.getElementById('appointmentForm').reset();selectedDoctor=null;});
+        document.getElementById('profileForm').addEventListener('submit',(e)=>{e.preventDefault();userName=document.getElementById('profileName').value||'Guest';userEmail=document.getElementById('profileEmail').value;saveData();updateProfileDisplay();alert('Your sacred space has been updated 💕');});
+
+        loadData(); updateDashboard(); updateMoodDisplay(); renderProducts(); renderCart(); renderDoctors(); updateAppointmentsDisplay(); updateProfileDisplay();
+    </script>
+</body>
+</html>
